@@ -12,6 +12,4 @@ else
     echo "ShellCrash启动成功，请进入容器，输入crash进行管理！"
 fi
 
-cp -r yamls /etc/ShellCrash
-
 sh
