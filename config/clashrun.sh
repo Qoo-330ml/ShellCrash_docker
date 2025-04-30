@@ -1,15 +1,26 @@
 #!/bin/bash
+set -e
+
+# 功能：检查并复制备份文件到挂载目录
+restore_files() {
+    src_dir=$1
+    dest_dir=$2
+
+    # 如果目标目录为空且备份存在，则复制文件
+    if [ -d "$src_dir" ] && [ -z "$(ls -A $dest_dir 2>/dev/null)" ]; then
+        echo "初始化文件到 $dest_dir..."
+        cp -a "$src_dir"/* "$dest_dir"/
+    fi
+}
+
+# 恢复 /tmp 内容
+restore_files /root/backup/tmp /tmp
+
+# 恢复 /etc/ShellCrash 内容
+restore_files /root/backup/ShellCrash /etc/ShellCrash
 
 source /root/.bashrc
 
-# 检测/etc/ShellCrash文件夹是否为空
-if [ -z "$(ls -A /etc/ShellCrash)" ]; then
-    # 如果文件夹为空，则运行指定命令
-    echo "检测到ShellCrash不存在，开始下载"
-    (echo "1"; sleep 5; echo "1"; sleep 5; echo "1"; sleep 5; echo "1") | sh install.sh
-else
-    # 如果文件夹不为空，则输出提示信息
-    echo "ShellCrash启动成功，请进入容器，输入crash进行管理！"
-fi
+echo "ShellCrash正常启动"
 
 sh
